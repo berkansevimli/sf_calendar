@@ -7,15 +7,14 @@ class Event {
   final DateTime to;
   final Color backgroundColor;
   final bool isAllDay;
+  List<Object>? resourceIds;
 
   Event(
-      {
-      required this.title,
+      {required this.title,
       required this.description,
       required this.from,
       required this.to,
       this.backgroundColor = Colors.lightGreen,
-      this.isAllDay = false
-      
-      });
+      this.isAllDay = false,
+      this.resourceIds});
 }

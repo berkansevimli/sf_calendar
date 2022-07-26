@@ -18,9 +18,7 @@ class MyApp extends StatelessWidget {
       create: (context) => EventProvider(),
       child: MaterialApp(
         title: 'Flutter Demo',
-        themeMode: ThemeMode.dark,
         darkTheme: ThemeData.dark().copyWith(
-            scaffoldBackgroundColor: Colors.black,
             appBarTheme: AppBarTheme(color: Colors.red)),
         home: const MyHomePage(title: 'Flutter Demo Home Page'),
       ),
@@ -41,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text(widget.title),
         ),
