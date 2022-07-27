@@ -28,7 +28,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     super.initState();
   }
 
-  int duration = 30;
+  int duration = 60;
 
   DateTime startTime = DateTime(2022, 7, 27, 9, 0, 0);
   DateTime endTime = DateTime(2022, 7, 27, 13, 00, 0);
@@ -76,7 +76,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
     print("third phase");
 
-    
+    print(busyHours);
+    for (int i = 0; i < hours.length; i++) {
+      if (busyHours.contains(hours[i].add(Duration(minutes: 15)))) {
+        hours.remove(hours[i]);
+      }
+    }
   }
 
   @override
@@ -133,12 +138,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     Event(
         title: "Yoga",
         description: "description",
-        from: DateTime(2022, 7, 27, 9, 0, 0),
-        to: DateTime(2022, 7, 27, 9, 30, 0)),
+        from: DateTime(2022, 7, 27, 9, 30, 0),
+        to: DateTime(2022, 7, 27, 10, 0, 0)),
     Event(
         title: "Egzersiz",
         description: "description",
-        from: DateTime(2022, 7, 27, 11, 15, 0),
+        from: DateTime(2022, 7, 27, 11, 00, 0),
         to: DateTime(2022, 7, 27, 11, 45, 0)),
     Event(
         title: "Lambda",
