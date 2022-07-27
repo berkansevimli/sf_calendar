@@ -18,6 +18,8 @@ class CalendarWidget extends StatefulWidget {
 class _CalendarWidgetState extends State<CalendarWidget> {
   DateTime selectedTime = DateTime.now();
   List<DateTime> hours = [];
+  List<DateTime> busyHours = [];
+  List<DateTime> appointmentStarts = [];
 
   @override
   void initState() {
@@ -29,12 +31,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   int duration = 30;
 
   DateTime startTime = DateTime(2022, 7, 27, 9, 0, 0);
-  DateTime endTime = DateTime(2022, 7, 27, 13, 0, 0);
+  DateTime endTime = DateTime(2022, 7, 27, 13, 00, 0);
 
   getHours() {
     print("getHours");
     for (DateTime i = startTime;
-        i.isBefore(endTime) || i.isAtSameMomentAs(startTime);
+        i.isBefore(endTime);
         i = i.add(Duration(minutes: 15))) {
       print(i);
       setState(() {
@@ -44,43 +46,37 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   getAppointments() {
-    print("getAppointments");
+    print("first phase");
+
+    for (int j = 0; j < hours.length; j++) {
+      for (int i = 0; i < appointments.length; i++) {
+        if ((hours[j].isAtSameMomentAs(appointments[i].from) ||
+                hours[j].isAfter(appointments[i].from)) &&
+            hours[j].isBefore(appointments[i].to)) {
+          print(hours[j]);
+          setState(() {
+            busyHours.add(hours[j]);
+          });
+        }
+        if (hours[j].isAtSameMomentAs(appointments[i].to)) {}
+      }
+    }
+    setState(() {
+      for (DateTime i in busyHours) {
+        hours.remove(i);
+      }
+    });
+    print("second phase ");
 
     for (int i = 0; i < appointments.length; i++) {
       setState(() {
-        // appointments[i].from = appointments[i].from.add(Duration(minutes: duration));
-        // appointments[i].to = appointments[i].to.add(Duration(minutes: duration));
-        for (int j = 0; j < hours.length; j++) {
-          // print(hours[j]);
-
-          if ((hours[j].isAfter(appointments[i].from) ||
-                  hours[j].isAtSameMomentAs(appointments[i].from)) &&
-              hours[j].isBefore(appointments[i].to)) {
-            //print("${hours[j]} is between ${appointments[i].from} and ${appointments[i].to}");
-
-            for (DateTime dateTime = appointments[i].from;
-                dateTime.isBefore(appointments[i].to) 
-                   ;
-                dateTime = dateTime.add(Duration(minutes: 30))) {
-              print(dateTime);
-              hours.remove(dateTime);
-              for (DateTime dateTime2 = appointments[i].from;
-                  dateTime2.isBefore(appointments[i].to);
-                  dateTime2 = dateTime2.add(Duration(minutes: 15))) {
-                print(dateTime2);
-                hours.remove(dateTime2);
-              }
-            }
-          }
-          // if (appointments[i].from.isAtSameMomentAs(hours[j])) {
-          //   hours.remove(appointments[i].from);
-          // }
-          // if (appointments[i].to.isAtSameMomentAs(hours[j])) {
-          //   hours.remove(appointments[i].from);
-          // }
-        }
+        appointmentStarts.add(appointments[i].from);
       });
     }
+
+    print("third phase");
+
+    
   }
 
   @override
@@ -134,16 +130,16 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   List<Event> appointments = [
-    // Event(
-    //     title: "Yoga",
-    //     description: "description",
-    //     from: DateTime(2022, 7, 27, 9, 0, 0),
-    //     to: DateTime(2022, 7, 27, 9, 30, 0)),
-    // Event(
-    //     title: "Yoga",
-    //     description: "description",
-    //     from: DateTime(2022, 7, 27, 11, 15, 0),
-    //     to: DateTime(2022, 7, 27, 11, 45, 0)),
+    Event(
+        title: "Yoga",
+        description: "description",
+        from: DateTime(2022, 7, 27, 9, 0, 0),
+        to: DateTime(2022, 7, 27, 9, 30, 0)),
+    Event(
+        title: "Egzersiz",
+        description: "description",
+        from: DateTime(2022, 7, 27, 11, 15, 0),
+        to: DateTime(2022, 7, 27, 11, 45, 0)),
     Event(
         title: "Lambda",
         description: "description",
