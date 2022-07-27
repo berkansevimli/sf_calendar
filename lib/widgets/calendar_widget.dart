@@ -28,7 +28,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     super.initState();
   }
 
-  int duration = 60;
+  int duration = 30;
 
   DateTime startTime = DateTime(2022, 7, 27, 9, 0, 0);
   DateTime endTime = DateTime(2022, 7, 27, 13, 00, 0);
@@ -46,8 +46,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   getAppointments() {
-    print("first phase");
-
+    print("first phase"); 
+    
     for (int j = 0; j < hours.length; j++) {
       for (int i = 0; i < appointments.length; i++) {
         if ((hours[j].isAtSameMomentAs(appointments[i].from) ||
@@ -66,22 +66,54 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         hours.remove(i);
       }
     });
+
     print("second phase ");
 
-    for (int i = 0; i < appointments.length; i++) {
-      setState(() {
-        appointmentStarts.add(appointments[i].from);
-      });
-    }
-
-    print("third phase");
-
-    print(busyHours);
-    for (int i = 0; i < hours.length; i++) {
-      if (busyHours.contains(hours[i].add(Duration(minutes: 15)))) {
-        hours.remove(hours[i]);
+    for (Event e in appointments) {
+      for (int i = 0; i < hours.length; i++) {
+        if (hours[i].add(Duration(minutes: duration)).isAfter(e.from) &&
+            hours[i].add(Duration(minutes: duration)).isBefore(e.to)) {
+          setState(() {
+            busyHours.add(hours[i]);
+            hours.remove(hours[i]);
+          });
+        }
+        // if (e.from.isBefore(hours[i]) && e.to.isAfter(hours[i])) {
+        //   setState(() {
+        //     busyHours.add(hours[i]);
+        //     hours.remove(hours[i]);
+        //   });
+        // }
       }
+      //  for (int i = 0; i < hours.length; i++) {
+      //   if (hours[i].add(Duration(minutes: duration)).isBefore(e.from)) {
+      //     setState(() {
+      //       busyHours.add(hours[i]);
+      //       hours.remove(hours[i]);
+      //     });
+      //   }
+      // }
     }
+    print(busyHours);
+   
+    
+
+    // for (int i = 0; i < appointments.length; i++) {
+    //   setState(() {
+    //     appointmentStarts.add(appointments[i].from);
+    //   });
+    // }
+
+    // print("third phase");
+
+    // print(busyHours);
+    // for (int i = 0; i < hours.length; i++) {
+    //   if (busyHours.contains(hours[i].add(Duration(minutes: 15)))) {
+    //     hours.remove(hours[i]);
+    //   }
+    // }
+
+    // print("fourth phase");
   }
 
   @override
