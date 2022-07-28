@@ -28,7 +28,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     super.initState();
   }
 
-  int duration = 30;
+  int duration = 45;
 
   DateTime startTime = DateTime(2022, 7, 27, 9, 0, 0);
   DateTime endTime = DateTime(2022, 7, 27, 13, 00, 0);
@@ -46,74 +46,42 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   getAppointments() {
-    print("first phase"); 
-    
-    for (int j = 0; j < hours.length; j++) {
-      for (int i = 0; i < appointments.length; i++) {
-        if ((hours[j].isAtSameMomentAs(appointments[i].from) ||
-                hours[j].isAfter(appointments[i].from)) &&
-            hours[j].isBefore(appointments[i].to)) {
-          print(hours[j]);
-          setState(() {
-            busyHours.add(hours[j]);
-          });
-        }
-        if (hours[j].isAtSameMomentAs(appointments[i].to)) {}
-      }
-    }
-    setState(() {
-      for (DateTime i in busyHours) {
-        hours.remove(i);
-      }
+    appointments.forEach((event) {
+      setState(() {
+        appointmentStarts.add(event.from);
+      });
     });
 
-    print("second phase ");
+    print("first phase");
+    appointments.forEach((element) {
+      for (DateTime dt = element.from;
+          dt.isBefore(element.to);
+          dt = dt.add(Duration(minutes: 15))) {
+        setState(() {
+          busyHours.add(dt);
+          hours.remove(dt);
+        });
+      }
 
-    for (Event e in appointments) {
       for (int i = 0; i < hours.length; i++) {
-        if (hours[i].add(Duration(minutes: duration)).isAfter(e.from) &&
-            hours[i].add(Duration(minutes: duration)).isBefore(e.to)) {
+        if ((hours[i].add(Duration(minutes: duration)).isAfter(element.from) ||
+                    hours[i]
+                        .add(Duration(minutes: duration))
+                        .isAtSameMomentAs(element.from)) &&
+                (hours[i]
+                    .add(Duration(minutes: duration))
+                    .isBefore(element.to)) ||
+            hours[i]
+                .add(Duration(minutes: duration))
+                .isAtSameMomentAs(element.to)) {
           setState(() {
-            busyHours.add(hours[i]);
             hours.remove(hours[i]);
           });
         }
-        // if (e.from.isBefore(hours[i]) && e.to.isAfter(hours[i])) {
-        //   setState(() {
-        //     busyHours.add(hours[i]);
-        //     hours.remove(hours[i]);
-        //   });
-        // }
       }
-      //  for (int i = 0; i < hours.length; i++) {
-      //   if (hours[i].add(Duration(minutes: duration)).isBefore(e.from)) {
-      //     setState(() {
-      //       busyHours.add(hours[i]);
-      //       hours.remove(hours[i]);
-      //     });
-      //   }
-      // }
-    }
+    });
+    print("hours: ${hours}");
     print(busyHours);
-   
-    
-
-    // for (int i = 0; i < appointments.length; i++) {
-    //   setState(() {
-    //     appointmentStarts.add(appointments[i].from);
-    //   });
-    // }
-
-    // print("third phase");
-
-    // print(busyHours);
-    // for (int i = 0; i < hours.length; i++) {
-    //   if (busyHours.contains(hours[i].add(Duration(minutes: 15)))) {
-    //     hours.remove(hours[i]);
-    //   }
-    // }
-
-    // print("fourth phase");
   }
 
   @override
