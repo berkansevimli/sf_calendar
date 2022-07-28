@@ -28,10 +28,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     super.initState();
   }
 
-  int duration = 45;
+  int duration = 60;
 
   DateTime startTime = DateTime(2022, 7, 27, 9, 0, 0);
-  DateTime endTime = DateTime(2022, 7, 27, 13, 00, 0);
+  DateTime endTime = DateTime(2022, 7, 27, 19, 00, 0);
 
   getHours() {
     print("getHours");
@@ -63,22 +63,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         });
       }
 
-      for (int i = 0; i < hours.length; i++) {
-        if ((hours[i].add(Duration(minutes: duration)).isAfter(element.from) ||
-                    hours[i]
-                        .add(Duration(minutes: duration))
-                        .isAtSameMomentAs(element.from)) &&
-                (hours[i]
-                    .add(Duration(minutes: duration))
-                    .isBefore(element.to)) ||
-            hours[i]
-                .add(Duration(minutes: duration))
-                .isAtSameMomentAs(element.to)) {
-          setState(() {
-            hours.remove(hours[i]);
-          });
-        }
+      for (int i = 0; i < (duration / 15); i++) {
+        print(i);
+        busyHours.add(element.from.subtract(Duration(minutes: (i) * 15)));
+        hours.remove(element.from.subtract(Duration(minutes: (i) * 15)));
       }
+
+
     });
     print("hours: ${hours}");
     print(busyHours);
@@ -138,17 +129,27 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     Event(
         title: "Yoga",
         description: "description",
-        from: DateTime(2022, 7, 27, 9, 30, 0),
-        to: DateTime(2022, 7, 27, 10, 0, 0)),
+        from: DateTime(2022, 7, 27, 9, 0, 0),
+        to: DateTime(2022, 7, 27, 9, 45, 0)),
     Event(
         title: "Egzersiz",
         description: "description",
-        from: DateTime(2022, 7, 27, 11, 00, 0),
-        to: DateTime(2022, 7, 27, 11, 45, 0)),
+        from: DateTime(2022, 7, 27, 11, 30, 0),
+        to: DateTime(2022, 7, 27, 12, 30, 0)),
     Event(
         title: "Lambda",
         description: "description",
-        from: DateTime(2022, 7, 27, 12, 30, 0),
-        to: DateTime(2022, 7, 27, 13, 0, 0)),
+        from: DateTime(2022, 7, 27, 14, 45, 0),
+        to: DateTime(2022, 7, 27, 15, 15, 0)),
+    Event(
+        title: "Lambda",
+        description: "description",
+        from: DateTime(2022, 7, 27, 16, 30, 0),
+        to: DateTime(2022, 7, 27, 17, 45, 0)),
+    Event(
+        title: "Lambda",
+        description: "description",
+        from: DateTime(2022, 7, 27, 18, 0, 0),
+        to: DateTime(2022, 7, 27, 19, 0, 0)),
   ];
 }
