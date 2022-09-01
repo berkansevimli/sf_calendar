@@ -46,12 +46,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   getAppointments() {
-    appointments.forEach((event) {
-      setState(() {
-        appointmentStarts.add(event.from);
-      });
-    });
-
+ 
     print("first phase");
     appointments.forEach((element) {
       for (DateTime dt = element.from;
